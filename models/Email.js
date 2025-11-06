@@ -49,13 +49,13 @@ const emailSchema = new mongoose.Schema({
   }
 });
 
-// TTL индекс для автоматического удаления старых писем
-emailSchema.index(
-  { receivedAt: 1 }, 
-  { 
-    expireAfterSeconds: (process.env.EMAIL_RETENTION_HOURS || 24) * 3600 
-  }
-);
+// TTL индекс ОТКЛЮЧЕН - письма не удаляются автоматически
+// emailSchema.index(
+//   { receivedAt: 1 }, 
+//   { 
+//     expireAfterSeconds: (process.env.EMAIL_RETENTION_HOURS || 24) * 3600 
+//   }
+// );
 
 module.exports = mongoose.model('Email', emailSchema);
 
