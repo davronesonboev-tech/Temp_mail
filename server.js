@@ -26,9 +26,9 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/tempmail'
 })
 .then(() => {
   console.log('✅ MongoDB подключен');
-  // Запускаем очистку старых писем каждый час
-  setInterval(cleanupOldEmails, 60 * 60 * 1000);
-  cleanupOldEmails(); // Запускаем сразу при старте
+  // Автоочистка ОТКЛЮЧЕНА - письма хранятся пока не удалишь вручную
+  // setInterval(cleanupOldEmails, 60 * 60 * 1000);
+  // cleanupOldEmails();
 })
 .catch(err => {
   console.error('❌ Ошибка подключения к MongoDB:', err);
