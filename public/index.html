@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TempMail - Временная почта</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="32" height="32" rx="8" fill="url(#gradient)"/>
+                    <path d="M8 12L16 18L24 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M8 12V20C8 21.1046 8.89543 22 10 22H22C23.1046 22 24 21.1046 24 20V12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs>
+                        <linearGradient id="gradient" x1="0" y1="0" x2="32" y2="32">
+                            <stop offset="0%" stop-color="#667eea"/>
+                            <stop offset="100%" stop-color="#764ba2"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <h1>TempMail</h1>
+            </div>
+            <div class="stats" id="stats">
+                <span class="stat-item">
+                    <span class="stat-icon">📧</span>
+                    <span id="emailCount">0</span> писем
+                </span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Email Generator Section -->
+            <div class="email-generator">
+                <div class="generator-card">
+                    <h2>Ваш временный email адрес</h2>
+                    <div class="email-display-container">
+                        <div class="email-display" id="currentEmail">
+                            <span class="placeholder">Нажмите кнопку для генерации адреса</span>
+                        </div>
+                        <div class="email-actions">
+                            <button class="btn btn-icon" id="copyBtn" title="Копировать">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                            </button>
+                            <button class="btn btn-icon" id="refreshBtn" title="Новый адрес">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="generator-buttons">
+                        <button class="btn btn-primary" id="generateBtn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M12 5v14M5 12h14"></path>
+                            </svg>
+                            Сгенерировать адрес
+                        </button>
+                        <button class="btn btn-secondary" id="customBtn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                            Свой адрес
+                        </button>
+                    </div>
+
+                    <div class="custom-email-form hidden" id="customForm">
+                        <input type="text" id="customUsername" placeholder="ваше_имя" class="input">
+                        <select id="domainSelect" class="select">
+                            <option value="">Выберите домен...</option>
+                        </select>
+                        <button class="btn btn-primary" id="createCustomBtn">Создать</button>
+                        <button class="btn btn-secondary" id="cancelCustomBtn">Отмена</button>
+                    </div>
+                </div>
+
+                <div class="info-cards">
+                    <div class="info-card">
+                        <div class="info-icon">🔒</div>
+                        <h3>Анонимно</h3>
+                        <p>Не требуется регистрация или личные данные</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">⚡</div>
+                        <h3>Быстро</h3>
+                        <p>Мгновенное получение писем</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">🗑️</div>
+                        <h3>Автоудаление</h3>
+                        <p>Письма удаляются через 24 часа</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emails List Section -->
+            <div class="emails-section" id="emailsSection">
+                <div class="emails-header">
+                    <h2>Входящие письма (<span id="inboxCount">0</span>)</h2>
+                    <div class="emails-actions">
+                        <button class="btn btn-secondary btn-sm" id="refreshEmailsBtn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"></path>
+                            </svg>
+                            Обновить
+                        </button>
+                        <button class="btn btn-danger btn-sm" id="deleteAllBtn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                            Удалить все
+                        </button>
+                    </div>
+                </div>
+
+                <div class="emails-list" id="emailsList">
+                    <div class="empty-state">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        <h3>Писем пока нет</h3>
+                        <p>Используйте сгенерированный email адрес для получения писем</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Email Modal -->
+        <div class="modal hidden" id="emailModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalSubject">Тема письма</h2>
+                    <button class="btn btn-icon" id="closeModalBtn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M18 6L6 18M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-meta">
+                    <div><strong>От:</strong> <span id="modalFrom"></span></div>
+                    <div><strong>Кому:</strong> <span id="modalTo"></span></div>
+                    <div><strong>Дата:</strong> <span id="modalDate"></span></div>
+                </div>
+                <div class="modal-body">
+                    <div class="email-view-tabs">
+                        <button class="tab-btn active" data-tab="html">HTML</button>
+                        <button class="tab-btn" data-tab="text">Текст</button>
+                    </div>
+                    <div class="email-content" id="emailContent">
+                        <iframe id="htmlFrame" class="email-frame"></iframe>
+                        <pre id="textContent" class="email-text hidden"></pre>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-danger" id="deleteEmailBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                        Удалить
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div class="toast-container" id="toastContainer"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
