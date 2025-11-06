@@ -30,11 +30,11 @@ const tempAddressSchema = new mongoose.Schema({
   }
 });
 
-// TTL индекс - удаляем адреса через 48 часов неактивности
-tempAddressSchema.index(
-  { lastAccessedAt: 1 }, 
-  { expireAfterSeconds: 48 * 3600 }
-);
+// TTL индекс ОТКЛЮЧЕН - адреса не удаляются автоматически
+// tempAddressSchema.index(
+//   { lastAccessedAt: 1 }, 
+//   { expireAfterSeconds: 48 * 3600 }
+// );
 
 module.exports = mongoose.model('TempAddress', tempAddressSchema);
 
